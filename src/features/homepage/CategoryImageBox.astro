@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+const { category, lang } = Astro.props;
+import { useTranslation, activityCategoryLink } from "../../i18n/utils";
+const t = useTranslation(lang, "common");
+import arrampicata from "../../assets/categories/arrampicata.jpg";
+import ferrate from "../../assets/categories/ferrate.jpg";
+import multipitch from "../../assets/categories/multipitch.jpg";
+import trekking from "../../assets/categories/trekking.jpg";
+import PlusIcon from "../../svg/plus-fill.svg";
+
+const images = {
+  arrampicata,
+  ferrate,
+  multipitch,
+  trekking,
+};
+const categoryImage = images[category.id];
+---
+
+<a
+  href={activityCategoryLink(category, lang)}
+  class="block relative group w-full h-full"
+>
+  <Image
+    src={categoryImage}
+    alt=""
+    width="722"
+    height="834"
+    decoding="async"
+    loading="lazy"
+    class="object-cover w-full h-full"
+  />
+  <PlusIcon
+    aria-hidden="true"
+    class="text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+  />
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 [background-image:linear-gradient(to_top,rgba(0,0,0,0.5)_10%,rgba(0,0,0,0.2)_25%,transparent_40%)] group-hover:bg-primary group-hover:opacity-50 transition-all duration-300"
+  >
+  </div>
+  <span class="absolute left-0 bottom-0 p-4 text-white font-medium uppercase">
+    {t(category.name)}
+  </span>
+</a>

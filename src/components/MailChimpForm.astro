@@ -1,0 +1,31 @@
+---
+import { useTranslation, getLocalizedLink } from "../i18n/utils";
+const { lang } = Astro.props;
+const t = useTranslation(lang, "common");
+---
+
+<form
+  action="https://bigalpineguide.us18.list-manage.com/subscribe/post?u=e944934082db675cce89ec7ad&id=bbdff4faa5&v_id=5868&f_id=003eaee6f0"
+  method="post"
+  target="_blank"
+  class="flex flex-col gap-2 items-start"
+>
+  <div class="flex">
+    <input
+      type="email"
+      name="EMAIL"
+      placeholder="Inserisci la tua email"
+      required
+      class="bg-white p-2 border border-black text-black"
+    />
+    <button type="submit" class="button">Iscriviti</button>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <input type="checkbox" required class="bg-white accent-primary w-4 h-4" /> Ho
+    letto la
+    <a href={getLocalizedLink("/privacy", lang)} target="_blank"
+      >{t("Privacy policy")}</a
+    >
+  </div>
+</form>

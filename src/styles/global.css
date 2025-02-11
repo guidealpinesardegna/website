@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #d81928;
+  --color-brown: #594f48;
+}
+
+@utility scrollbar-hidden {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .button {
+    @apply bg-primary text-white py-3 px-6 font-medium text-sm uppercase;
+  }
+  .button:hover {
+    @apply outline-2 outline-black transition-all;
+  }
+}

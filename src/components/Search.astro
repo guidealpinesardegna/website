@@ -1,0 +1,239 @@
+---
+import fs from "fs-extra";
+import {
+  getLocalizedField,
+  contentTypeLink,
+  useTranslation,
+} from "../i18n/utils";
+import SearchIcon from "../svg/search.svg";
+const activities = fs.readJsonSync("_cache/activities.json");
+const { lang } = Astro.props;
+const dataset = activities.map((activity) => ({
+  title: getLocalizedField("fields.title", activity, lang),
+  slug: getLocalizedField("fields.slug", activity, lang),
+  abstract: getLocalizedField("fields.abstract", activity, lang),
+  image: activity.fields.cover.fields.file.url,
+  link: contentTypeLink(activity, lang),
+}));
+const t = useTranslation(lang, "common");
+---
+
+<form
+  id="search-form"
+  role="search"
+  data-posts={JSON.stringify(dataset)}
+  class=`relative`
+>
+  <label for="search-input" class="sr-only">Cerca un’uscita</label>
+  <input
+    type="text"
+    id="search-input"
+    autocomplete="off"
+    aria-autocomplete="none"
+    class="border-2 border-gray-700 py-2 px-8 pr-2"
+    placeholder={t("Cerca...")}
+  />
+  <SearchIcon aria-hidden="true" class="absolute left-2 top-3.5 h-4" />
+  <div
+    id="results"
+    class="fixed w-max max-w-[300px] border-2 border-slate-700 p-4 hidden"
+  >
+    <div
+      id="arrow"
+      aria-hidden="true"
+      class="absolute bg-white w-4 h-4 rotate-45 -translate-y-1.5 border-t-2 border-l-2 border-slate-700"
+    >
+    </div>
+  </div>
+</form>
+
+<script>
+  //@ts-nocheck
+
+  import { computePosition, offset, arrow } from "@floating-ui/dom";
+  import { trapFocus } from "../lib/utils";
+
+  // const lang = document.documentElement.getAttribute("lang");
+  const form = document.querySelector("#search-form");
+  const trigger = document.querySelector("#search-input");
+  const results = document.querySelector("#results");
+  const arrowElement = document.querySelector("#arrow");
+  const posts = JSON.parse(form.getAttribute("data-posts"));
+  const resultList = document.createElement("ul");
+  const hint = document.createElement("p");
+  hint.classList.add("hint");
+  hint.textContent = "Digita almento 3 caratteri";
+  const noResults = document.createElement("p");
+  noResults.classList.add("no-results");
+  noResults.textContent = "Nessun Risultato";
+  let searchResults = [];
+
+  document.body.appendChild(results); // move out the dom
+
+  trigger.addEventListener("keyup", function (e) {
+    const query = e.target.value;
+
+    showResults();
+    if (e.key === "Escape") {
+      trigger.value = "";
+      hideResults();
+    }
+
+    if (query.length > 2) {
+      searchResults = posts
+        .filter(
+          (post) =>
+            post.title.toLowerCase().includes(query.toLowerCase()) ||
+            (post.tags || [])
+              .map((t) => t.toLowerCase())
+              .includes(query.toLowerCase())
+        )
+        .slice(0, 5);
+    } else {
+      searchResults = [];
+    }
+
+    search(query);
+  });
+
+  trigger.addEventListener("blur", function (e) {
+    if (!searchResults.length) {
+      hideResults();
+      trigger.value = "";
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (
+      event.key === "Tab" &&
+      searchResults.length > 0 &&
+      document.activeElement === trigger
+    ) {
+      event.preventDefault();
+      const firstFocusableElement = results.querySelectorAll("a")[0];
+      if (firstFocusableElement) {
+        firstFocusableElement.focus();
+        trapFocus(results);
+      }
+    }
+  });
+
+  function update() {
+    computePosition(trigger, results, {
+      placement: "bottom-left",
+      strategy: "fixed",
+      middleware: [offset(20), arrow({ element: arrowElement })],
+    }).then(({ x, y, placement, middlewareData }) => {
+      Object.assign(results.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+      });
+      const { x: arrowX, y: arrowY } = middlewareData.arrow;
+      const staticSide = {
+        top: "bottom",
+        right: "left",
+        bottom: "top",
+        left: "right",
+      }[placement.split("-")[0]];
+
+      Object.assign(arrowElement.style, {
+        left: arrowX != null ? `${arrowX}px` : "",
+        top: arrowY != null ? `${arrowY}px` : "",
+        right: "",
+        bottom: "",
+        [staticSide]: "-4px",
+      });
+    });
+  }
+
+  function search(query) {
+    if (query.length > 2) {
+      if (searchResults.length > 0) {
+        hideHint();
+        hideNoResults();
+        results.appendChild(resultList);
+        resultList.innerHTML = "";
+        searchResults.forEach((activity) => {
+          resultList.insertAdjacentHTML(
+            "beforeend",
+            `<li>
+              <a href="${activity.link}" class="flex gap-4 focus:outline-2 outline-color-primary">
+                <img src="${activity.image}?w=100&h=100&fm=avif&fit=thumb&q=50" width="60" height="60" alt="" class="shrink-0 w-[60px] h-[60px]"/>
+                <div>
+                  <p class="font-bold mb-1">${activity.title}</p>
+                  <p class="text-sm">${activity.abstract}</p>
+                </div>
+                
+              </a>
+            </li>`
+          );
+        });
+
+        results.addEventListener("keyup", function (e) {
+          if (e.key === "Escape") {
+            hideResults();
+            trigger.value = "";
+            trigger.focus();
+          }
+        });
+      } else {
+        hideResultList();
+        hideHint();
+        results.appendChild(noResults);
+      }
+    } else {
+      results.appendChild(hint);
+      hideResultList();
+      hideNoResults();
+    }
+  }
+
+  function hideHint() {
+    if (results.contains(hint)) {
+      results.removeChild(hint);
+    }
+  }
+
+  function hideNoResults() {
+    if (results.contains(noResults)) {
+      results.removeChild(noResults);
+    }
+  }
+
+  function hideResultList() {
+    if (results.contains(resultList)) {
+      results.removeChild(resultList);
+    }
+  }
+
+  function showResults() {
+    results.classList.remove("hidden");
+    results.removeAttribute("inert");
+    trigger.setAttribute("aria-expanded", "true");
+    update();
+  }
+
+  function hideResults() {
+    results.classList.add("hidden");
+    results.setAttribute("tabindex", "");
+    results.setAttribute("inert", "");
+    results.blur();
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  function setAriaAttributes() {
+    results.setAttribute("tabindex", "-1");
+    results.setAttribute("inert", "");
+    results.setAttribute("aria-role", "dialog");
+    trigger.setAttribute("aria-controls", "results");
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  setAriaAttributes();
+
+  document.body.addEventListener("click", function (e) {
+    if (!results.contains(e.target) && !trigger.contains(e.target)) {
+      hideResults();
+    }
+  });
+</script>

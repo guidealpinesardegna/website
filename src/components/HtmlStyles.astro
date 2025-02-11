@@ -1,0 +1,63 @@
+<style is:global>
+  .html-fragment {
+    line-height: 1.6;
+  }
+  .html-fragment ul {
+    list-style: square;
+    margin-left: 1em;
+  }
+  .html-fragment li {
+    margin-bottom: 0.3em;
+  }
+  .html-fragment li p {
+    margin-bottom: 0em;
+  }
+  .html-fragment li::marker {
+    color: var(--color-primary);
+  }
+
+  .html-fragment p {
+    margin-bottom: 1em;
+  }
+
+  .html-fragment ul + p {
+    margin-top: 1em;
+  }
+
+  .html-fragment a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .html-fragment p:empty {
+    height: 2em;
+  }
+
+  .html-fragment table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .html-fragment th {
+    text-align: left;
+    background: #eee;
+  }
+
+  .html-fragment th,
+  .html-fragment td {
+    border: 1px solid #eee;
+    padding: 0.5rem;
+  }
+
+  .html-fragment td p,
+  .html-fragment th p {
+    margin: 0;
+  }
+
+  @media screen and (orientation: portrait) {
+    .html-fragment table {
+      font-size: 85%;
+    }
+  }
+</style>

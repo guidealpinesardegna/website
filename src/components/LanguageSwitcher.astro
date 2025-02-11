@@ -1,0 +1,46 @@
+---
+import { i18nConfig } from "../../astro.config.mjs";
+import { pageLink, getLocalizedField, contentTypeLink } from "../i18n/utils";
+import GlobeIcon from "../svg/globe.svg";
+
+const { lang: currentLocale, item } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const languages = i18nConfig.locales;
+---
+
+<nav class=`flex gap-3 items-center`>
+  <GlobeIcon aria-hidden="true" class="h-4" />
+  <ul class="flex gap-2 font-medium">
+    {
+      languages.map((lang) => {
+        let localizedLink;
+        if (!item) {
+          localizedLink = pageLink(currentPath, lang, currentLocale);
+        } else {
+          const link = getLocalizedField("fields.slug", item, lang);
+          const currentSubPath = currentPath.split("/").pop();
+          if (currentSubPath !== link) {
+            localizedLink = contentTypeLink(item, lang);
+          }
+        }
+
+        if (localizedLink) {
+          return (
+            <li>
+              <a href={localizedLink} lang={lang}>
+                {lang.toUpperCase()}
+              </a>
+            </li>
+          );
+        } else {
+          return (
+            <li class="text-primary ">
+              <span> {lang.toUpperCase()}</span>
+            </li>
+          );
+        }
+      })
+    }
+  </ul>
+</nav>

@@ -1,0 +1,121 @@
+---
+import fs from "fs-extra";
+import { Image } from "astro:assets";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import {
+  useTranslation,
+  getLocalizedField,
+  getLocalizedLink,
+  contentTypeLink,
+} from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
+import WidthContainer from "../../components/WidthContainer.astro";
+import CategoryImageBox from "./CategoryImageBox.astro";
+import PostCard from "../blog/PostCard.astro";
+import { CATEGORIES, SITE_NAME, SITE_SLOGAN } from "../../constants";
+import chisiamo from "../../assets/chi-siamo.jpg";
+import grivel from "../../assets/partners/grivel.png";
+import k2 from "../../assets/partners/k2.png";
+import ortovox from "../../assets/partners/ortovox.png";
+import salewa from "../../assets/partners/salewa.png";
+
+const { lang } = Astro.props;
+const t = useTranslation(lang, "common");
+const info = fs.readJsonSync("_cache/homepage.json");
+const posts = fs.readJsonSync("_cache/posts.json").slice(0, 4);
+---
+
+<Layout lang={lang} info={info}>
+  <link
+    rel="preconnect"
+    href="https://assets.ctfassets.net"
+    crossorigin="anonymous"
+    slot="head"
+  />
+  <div class="text-center max-sm:mt-8 md:mt-16">
+    <h1 class="text-5xl font-black mb-4">{t(SITE_NAME)}</h1>
+    <p class="text-gray-600 text-xl">{t(SITE_SLOGAN)}</p>
+  </div>
+
+  {/* Navigation Wrapper */}
+  <nav class="flex justify-center max-sm:mt-8 md:mt-16">
+    {/* Scrollable List for Mobile, Grid for Larger Screens */}
+    <ul
+      class="max-sm:flex max-sm:overflow-x-auto max-sm:snap-x max-sm:snap-mandatory max-sm:scroll-smooth md:grid md:grid-cols-2 w-full lg:grid-cols-4 scrollbar-hidden"
+    >
+      {
+        CATEGORIES.map((category) => (
+          <li class="max-sm:snap-center max-sm:flex-shrink-0 max-sm:w-screen md:w-auto">
+            <CategoryImageBox lang={lang} category={category} />
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <main class="mt-24 max-sm:mt-16">
+    <WidthContainer>
+      <h2 class="text-xl font-bold uppercase mb-4">{t("Chi siamo")}</h2>
+      <div
+        class="flex max-sm:flex-col max-sm:gap-8 gap-16 max-sm:flex-none items-start"
+      >
+        <Image
+          src={chisiamo}
+          alt=""
+          width="1012"
+          height="910"
+          class="min-md:w-[50%]"
+        />
+        <div class="max-sm:w-auto min-md:w-[50%]">
+          <div
+            class="html-fragment mb-16"
+            set:html={documentToHtmlString(
+              getLocalizedField("fields.whoWeAreIntro", info, lang)
+            )}
+          />
+          <a class="button" href={getLocalizedLink("/chi-siamo", lang)}
+            >{t("Leggi tutto")}</a
+          >
+        </div>
+      </div>
+    </WidthContainer>
+  </main>
+  <aside>
+    <WidthContainer>
+      <h2 class="text-xl font-bold uppercase mt-24 mb-4">
+        {t("Dal blog")}
+      </h2></WidthContainer
+    >
+
+    <div class="bg-primary/10 py-24">
+      <WidthContainer>
+        <ul class="flex flex-col min-md:grid min-md:grid-cols-2 gap-8">
+          {
+            posts.map((post) => (
+              <li class="border-b border-dashed border-b-gray-400 pb-8 min-md:nth-[3]:border-none min-md:nth-[4]:border-none max-sm:nth-[4]:border-none">
+                <a href={contentTypeLink(post, lang)}>
+                  <PostCard post={post} lang={lang} TitleTag="h3" />
+                </a>
+              </li>
+            ))
+          }
+        </ul></WidthContainer
+      >
+    </div>
+  </aside>
+  <WidthContainer>
+    <ul class="flex flex-wrap justify-center gap-8 w-fit mx-auto my-36">
+      <li>
+        <Image src={grivel} alt="" width="80" height="80" loading="lazy" />
+      </li>
+      <li>
+        <Image src={salewa} alt="" width="114" height="66" loading="lazy" />
+      </li>
+      <li>
+        <Image src={ortovox} alt="" width="137" height="70" loading="lazy" />
+      </li>
+      <li>
+        <Image src={k2} alt="" width="140" height="80" loading="lazy" />
+      </li>
+    </ul>
+  </WidthContainer>
+</Layout>

@@ -1,0 +1,94 @@
+---
+import { useTranslation, getLocalizedLink } from "../i18n/utils";
+import FacebookIcon from "../svg/Facebook.svg";
+import InstagramIcon from "../svg/Instagram.svg";
+import WidthContainer from "./WidthContainer.astro";
+import MailchimpForm from "../components/MailChimpForm.astro";
+import Whatsappicon from "../svg/whatsapp.svg";
+
+const { lang, info } = Astro.props;
+const t = useTranslation(lang, "common");
+---
+
+<div class="bg-brown text-white py-16 px-8 text-sm">
+  <WidthContainer>
+    <div class="flex max-md:flex-col max-sm:gap-8 min-md:gap-48">
+      <div>
+        <h2 class="uppercase font-bold text-sm mb-4">{t("Newsletter")}</h2>
+        <p class="mb-6 max-w-[300px]">
+          {t("Iscriviti per rimanere aggiornato sulle nostre ultime attività")}
+        </p>
+        <MailchimpForm lang={lang} />
+      </div>
+      <div>
+        <h2 class="uppercase font-bold text-sm mb-4">{t("Partner")}</h2>
+        <ul class="flex flex-col gap-3">
+          <li>
+            <a href="https://www.arrampicatasardegna.com/" target="_blank"
+              >Arrampicata Sardegna</a
+            >
+          </li>
+          <li>
+            <a href="https://proup.team/" target="_blank">Proup Team</a>
+          </li>
+          <li>
+            <a href="https://bb-sardegna.com/" target="_blank"
+              >B&B Pedra Rubia</a
+            >
+          </li>
+          <li>
+            <a href="https://pedrarubia.com/" target="_blank"
+              >Pedra Rubia Blog</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="uppercase font-bold text-sm mb-4">{t("Info & Contatti")}</h2>
+        <div class="flex flex-col gap-2">
+          <a href={`mailto:${info.fields.email}`} class="underline"
+            >{info.fields.email}</a
+          >
+          <a href={`tel:${info.fields.phone}`} class="underline"
+            >{info.fields.phone}</a
+          >
+          <a href={getLocalizedLink("/privacy", lang)} target="_blank"
+            >{t("Privacy policy")}</a
+          >
+        </div>
+
+        <ul class="flex items-center gap-4 mb-6 mt-4">
+          <li>
+            <a href={info.fields.facebookLink}
+              ><FacebookIcon /><span class="sr-only"
+                >{t("Seguici su instagram")}</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href={info.fields.instagramLink}
+              ><InstagramIcon /><span class="sr-only"
+                >{t("Seguici su instagram")}</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href={`https://wa.me/${info.fields.phone}`}
+              ><Whatsappicon class="w-8" /><span class="sr-only"
+                >{t("Contattaci via Whatsapp")}</span
+              ></a
+            >
+          </li>
+        </ul>
+        <img
+          src="/images/logo-guide-alpine.avif"
+          loading="lazy"
+          width="50"
+          height="50"
+          alt=""
+          class="mt-4"
+        />
+      </div>
+    </div>
+  </WidthContainer>
+</div>

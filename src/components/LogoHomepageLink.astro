@@ -1,0 +1,13 @@
+---
+import { useTranslation, getLocalizedLink } from "../i18n/utils";
+import Logo from "../svg/Logo.svg";
+
+const { lang } = Astro.props;
+const t = useTranslation(lang, "common");
+---
+
+<a href={getLocalizedLink("/", lang)}
+  ><span class="sr-only">{t("Torna alla homepage")}</span><Logo
+    aria-hidden="true"
+  /></a
+>

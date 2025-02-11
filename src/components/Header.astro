@@ -1,0 +1,36 @@
+---
+import { useTranslation, getLocalizedLink } from "../i18n/utils";
+import WidthContainer from "./WidthContainer.astro";
+import DesktopHeader from "./DesktopHeader.astro";
+import MobileHeader from "./MobileHeader.astro";
+
+const { lang, item } = Astro.props;
+const t = useTranslation(lang, "common");
+const menuLinks = [
+  {
+    text: t("Attività"),
+    url: getLocalizedLink("/attivita", lang),
+  },
+  {
+    text: t("Chi siamo"),
+    url: getLocalizedLink("/chi-siamo", lang),
+  },
+  {
+    text: t("Blog"),
+    url: getLocalizedLink("/blog", lang),
+  },
+  {
+    text: t("Contatti"),
+    url: getLocalizedLink("/blog", lang),
+  },
+];
+---
+
+<WidthContainer Tag="header" class="mt-8">
+  <div class="max-lg:hidden">
+    <DesktopHeader lang={lang} item={item} menuLinks={menuLinks} />
+  </div>
+  <div class="min-lg:hidden">
+    <MobileHeader lang={lang} item={item} menuLinks={menuLinks} />
+  </div>
+</WidthContainer>

@@ -1,0 +1,66 @@
+---
+const { lang } = Astro.props;
+import { useTranslation, getLocalizedLink } from "../i18n/utils";
+const t = useTranslation(lang, "common");
+---
+
+<div
+  id="cookies-eu-banner"
+  style="display: none;"
+  data-wait-remove="250"
+  class="fixed font-sans left-0 bottom-0 w-full bg-black text-white p-6 pb-10 z-50"
+>
+  <div class="max-w-screen-xl m-auto text-sm">
+    <h2 class="font-bold text-base mb-2">{t("Informativa")}</h2>
+    {
+      t(
+        "Usiamo i cookie di Google reCAPTCHA per la protezione dallo SPAM, i cookies di Google Analytics per le statistiche e i cookies di Instagram e Youtube per i video e i reel"
+      )
+    },
+    <a
+      href={getLocalizedLink("chi-siamo")}
+      id="cookies-eu-more"
+      class="text-primary underline">{t("Leggi l’informativa completa")}</a
+    ><br /><br />
+    <div class="flex gap-6">
+      <button id="cookies-eu-reject" class="text-primary underline text-base"
+        >{t("Rifiuta")}</button
+      >
+      <button id="cookies-eu-accept" class="btn">{t("Accetta")}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import CookiesEuBanner from "cookies-eu-banner/dist/cookies-eu-banner.min.js";
+  new CookiesEuBanner(
+    function () {
+      // after accept code
+
+      setTimeout(() => {
+        var gtagScript = document.createElement("script");
+        gtagScript.async = true;
+        gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=";
+        document.head.appendChild(gtagScript);
+
+        var scriptLogic = document.createElement("script");
+        scriptLogic.innerText = `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-VGKFXY6GWS');`;
+
+        document.head.appendChild(scriptLogic);
+
+        const embeds = document.querySelectorAll("iframe");
+        if (embeds) {
+          Array.from(embeds).forEach((iframe) =>
+            iframe.setAttribute("src", iframe.getAttribute("data-src"))
+          );
+        }
+      }, 1000);
+    },
+    true,
+    true
+  );
+</script>

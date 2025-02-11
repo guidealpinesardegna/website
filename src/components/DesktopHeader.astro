@@ -1,0 +1,35 @@
+---
+import { useTranslation } from "../i18n/utils";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import Search from "./Search.astro";
+import LogoHomepageLink from "./LogoHomepageLink.astro";
+
+const { menuLinks, lang, item } = Astro.props;
+const t = useTranslation(lang, "common");
+---
+
+<div class="flex justify-between gap-8 items-center">
+  <div class="flex-1"><LanguageSwitcher lang={lang} item={item} /></div>
+  <nav>
+    <ul class="flex items-center gap-8 uppercase font-medium">
+      {
+        menuLinks.slice(0, 2).map((link) => (
+          <li>
+            <a href={link.url}>{link.text}</a>
+          </li>
+        ))
+      }
+      <li class="mx-8"><LogoHomepageLink lang={lang} /></li>
+      {
+        menuLinks.slice(2, 4).map((link) => (
+          <li>
+            <a href={link.url}>{link.text}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <div class="flex-1 ml-auto flex justify-end">
+    <Search lang={lang} />
+  </div>
+</div>

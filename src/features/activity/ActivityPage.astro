@@ -1,0 +1,10 @@
+---
+import fs from "fs-extra";
+import Layout from "../../layouts/Layout.astro";
+import { getLocalizedField } from "../../i18n/utils";
+const { lang, activity } = Astro.props;
+---
+
+<Layout lang={lang} item={activity}
+  >{getLocalizedField("fields.title", activity, lang)}</Layout
+>
