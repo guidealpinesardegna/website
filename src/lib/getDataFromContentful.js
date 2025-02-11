@@ -44,14 +44,19 @@ const getEntry = async (entryId) => {
   return [post];
 };
 
+const writeJson = async (fileName, data) => {
+  const cleanData = JSON.stringify(data, null, 2).replace(
+    /[\u2028\u2029\uFEFF\u200B-\u200D]/g,
+    ""
+  ); // Remove problematic Unicode characters
+  await fs.outputFile(`_cache/${fileName}.json`, cleanData);
+};
+
 async function getHomePage() {
   const homepage = await getEntry(HOMEPAGE_ENTRY_ID, {
     include: 2,
   });
-  await fs.outputFile(
-    "_cache/homepage.json",
-    JSON.stringify(homepage[0], null, 2)
-  );
+  await writeJson("homepage", homepage[0]);
   return homepage;
 }
 
@@ -61,11 +66,7 @@ async function getActivities() {
     include: 2,
   });
 
-  await fs.outputFile(
-    "_cache/activities.json",
-    JSON.stringify(activities, null, 2)
-  );
-
+  await writeJson("activities", activities);
   return activities;
 }
 
@@ -75,17 +76,13 @@ async function getBlogPosts() {
     include: 2,
   });
 
-  await fs.outputFile(
-    "_cache/posts.json",
-    JSON.stringify(
-      posts.sort((a, b) => {
-        const dateA = new Date(a.fields.date);
-        const dateB = new Date(b.fields.date);
-        return dateB - dateA;
-      }),
-      null,
-      2
-    )
+  await writeJson(
+    "posts",
+    posts.sort((a, b) => {
+      const dateA = new Date(a.fields.date);
+      const dateB = new Date(b.fields.date);
+      return dateB - dateA;
+    })
   );
 
   return posts;

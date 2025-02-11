@@ -6,7 +6,7 @@ const t = useTranslation(lang, "blog");
 
 <article class="flex gap-4 max-w-[500px] group">
   <img
-    class="block aspect-[1/1] bg-gray-100 object-cover group-hover:hidden"
+    class="block aspect-[1/1] bg-gray-100 object-cover group-hover:outline-primary group-hover:outline-4 transition-all"
     width="120"
     height="120"
     src={`${post?.fields?.cover?.fields?.file?.url}?w=400&h=400&fit=thumb&fm=avif&q=50`}

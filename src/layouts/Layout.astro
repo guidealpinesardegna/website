@@ -5,9 +5,10 @@ import Footer from "../components/Footer.astro";
 import FontsImport from "../components/FontsImport.astro";
 import HtmlStyles from "../components/HtmlStyles.astro";
 import Cookiebanner from "../components/Cookiebanner.astro";
-const { lang, info, title, description, url, ogType, ogImage, item } =
-  Astro.props;
+import { SITE_URL } from "../constants";
+const { lang, info, title, description, ogType, ogImage, item } = Astro.props;
 const isDev = import.meta.env.DEV;
+const canonicalUrl = `${SITE_URL}${Astro.url.pathname}`;
 ---
 
 <html lang={lang} class="scrollbar-stable scroll-smooth">
@@ -28,11 +29,14 @@ const isDev = import.meta.env.DEV;
     <meta name="description" content={description} />
     <meta name="og:description" content={description} />
     <meta name="twitter:description" content={description} />
-    <meta name="og:type" content={ogType} />
+    <meta name="og:type" content={ogType || "website"} />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:image" content={ogImage} />
+    <meta
+      name="twitter:image"
+      content={ogImage || "/images/default-og-image.jpg"}
+    />
     <meta name="og:image" content={ogImage} />
-    <meta name="og:url" content={url} />
+    <meta name="og:url" content={canonicalUrl} />
     <slot name="head" />
     <title>{title}</title>
 
@@ -42,7 +46,7 @@ const isDev = import.meta.env.DEV;
   </head><body>
     <Cookiebanner lang={lang} />
     <Header lang={lang} item={item} info={info} />
-    <div><slot /></div>
+    <div class="pb-24"><slot /></div>
     <Footer lang={lang} info={info} />
   </body>
 </html>

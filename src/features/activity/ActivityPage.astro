@@ -1,11 +1,159 @@
 ---
 import fs from "fs-extra";
+import dayjs from "dayjs";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import Layout from "../../layouts/Layout.astro";
-import { getLocalizedField } from "../../i18n/utils";
+import WidthContainer from "../../components/WidthContainer.astro";
+import DetailSummary from "../../components/DetailSummary.astro";
+import Tag from "../../components/Tag.astro";
+import ResponsiveImage from "../../components/ResponsiveImage.astro";
+import ActivityMap from "./ActivityMap.astro";
+import ActivityGallery from "./ActivityGallery.astro";
+import {
+  activityCategoryLink,
+  getLocalizedField,
+  useTranslation,
+} from "../../i18n/utils";
+import { SITE_NAME, CATEGORIES } from "../../constants";
+import CalendarIcon from "../../svg/calendar.svg";
+import EuroIcon from "../../svg/euro.svg";
 const { lang, activity } = Astro.props;
 const info = fs.readJsonSync("_cache/homepage.json");
+const t = useTranslation(lang, "activity");
+const coverBaseUrl = activity.fields.cover.fields.file.url;
 ---
 
-<Layout lang={lang} info={info} item={activity}
-  >{getLocalizedField("fields.title", activity, lang)}</Layout
+<Layout
+  lang={lang}
+  info={info}
+  item={activity}
+  title={`${getLocalizedField("fields.title", activity, lang)} - ${SITE_NAME}`}
+  description={getLocalizedField("fields.abstract", activity, lang)}
+  ogImage={`https:${activity.fields.cover.fields.file.url}${decodeURIComponent(
+    "?w=1200&h=630&fm=jpg&fit=thumb"
+  )}`}
 >
+  <WidthContainer>
+    <div class="text-center max-sm:mt-8 min-sm:mt-16 max-sm:mb-8 min-sm:mb-16">
+      <h1 class="text-5xl font-black mb-4">
+        {getLocalizedField("fields.title", activity, lang)}
+      </h1>
+      <p class="text-gray-600 text-xl">
+        {getLocalizedField("fields.abstract", activity, lang)}
+      </p>
+    </div></WidthContainer
+  >
+  <div class="flex justify-center">
+    <ResponsiveImage
+      src={`${coverBaseUrl}?w=3000&h=1000&q=50&fm=avif`}
+      sizes={{
+        "600": `${coverBaseUrl}?w=1000&h=333&q=70&fm=avif`,
+        "1024": `${coverBaseUrl}?w=1500&h=500&q=70&fm=avif`,
+        "1600": `${coverBaseUrl}?w=2100&h=700&q=70&fm=avif`,
+      }}
+      alt={activity.fields.cover.fields.title || ""}
+      loading="eager"
+      fetchpriority="high"
+      width="1500"
+      height="500"
+      class="bg-gray-100 object-cover max-w-[1600px]"
+    />
+  </div>
+  <WidthContainer>
+    <div
+      class="flex max-md:flex-col min-md:flex-row max-md:mt-16 min-md:mt-24 max-md:gap-8 min-md:gap-32 items-start"
+    >
+      <main class="min-md:w-[70ch]">
+        <div
+          class="html-fragment mb-16 min-lg:text-lg"
+          set:html={documentToHtmlString(
+            getLocalizedField("fields.description", activity, lang)
+          )}
+        />
+        <div class="flex flex-col gap-4">
+          <DetailSummary summary={t("Dove")}>
+            <ActivityMap activity={activity} lang={lang} />
+            <p class="mt-6">
+              {getLocalizedField("fields.where", activity, lang)}
+            </p>
+          </DetailSummary>
+          <DetailSummary summary={t("Difficoltà")}>
+            {
+              getLocalizedField("fields.difficulty", activity, lang)
+            }</DetailSummary
+          >
+          <DetailSummary summary={t("Dimensioni del gruppo")}>
+            {
+              getLocalizedField("fields.groupSize", activity, lang)
+            }</DetailSummary
+          >
+        </div>
+        <h2 class="uppercase font-bold mb-4 mt-16">
+          {t("Galleria fotografica")}
+        </h2>
+        <ActivityGallery activity={activity} />
+      </main>
+      <aside class="w-[400px]">
+        <div class="bg-gray-100 p-8">
+          <dl>
+            <dt
+              class="font-bold uppercase text-sm mb-2 flex items-center gap-1"
+            >
+              <CalendarIcon class="h-5" />{t("Quando")}
+            </dt>
+            <dd class="border-b border-dashed border-gray-300 pb-6">
+              <span
+                >{dayjs(activity.fields.dateStart).format("DD/MM/YYYY")}{
+                  activity.fields.dateEnd &&
+                    ` - ${dayjs(activity.fields.dateEnd).format("DD/MM/YYYY")}`
+                }</span
+              >
+            </dd>
+            <dt
+              class="font-bold uppercase text-sm mb-2 flex items-center gap-1 mt-6"
+            >
+              <EuroIcon class="h-5" />{t("Costo")}
+            </dt>
+            <dd>
+              <span>{getLocalizedField("fields.price", activity, lang)}</span>
+            </dd>
+          </dl>
+        </div>
+
+        <form name="contact" netlify class="p-6 bg-primary/10 mt-8">
+          <h2 class="uppercase font-bold mb-8">
+            {t("Richiedi informazioni")}
+          </h2>
+          <p class="sr-only">
+            <input type="text" name="attivita" value={activity.fields.title} />
+          </p>
+          <p class="flex flex-col gap-1 mb-4">
+            <label class="label">{t("Nome")}</label>
+            <input type="text" name="nome" required class="textfield" />
+          </p>
+          <p class="flex flex-col gap-1 mb-4">
+            <label class="label">Email</label>
+            <input type="email" name="email" required class="textfield" />
+          </p>
+          <p class="flex flex-col gap-1 mb-4">
+            <label class="label">{t("Messaggio")}</label>
+            <textarea name="messaggio" required class="textfield" required
+            ></textarea>
+          </p>
+
+          <p>
+            <button type="submit" class="button">Send</button>
+          </p>
+        </form>
+        <div class="pt-16">
+          <Tag
+            href={activityCategoryLink(
+              CATEGORIES.find((c) => c.id === activity.fields.category),
+              lang
+            )}>{activity.fields.category}</Tag
+          >
+        </div>
+      </aside>
+    </div>
+  </WidthContainer>
+</Layout>

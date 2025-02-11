@@ -3,6 +3,7 @@ import { useTranslation, getLocalizedLink } from "../i18n/utils";
 import WidthContainer from "./WidthContainer.astro";
 import DesktopHeader from "./DesktopHeader.astro";
 import MobileHeader from "./MobileHeader.astro";
+import { ACTIVITY_CONTENT_TYPE } from "../constants";
 
 const { lang, item } = Astro.props;
 const t = useTranslation(lang, "common");
@@ -10,6 +11,9 @@ const menuLinks = [
   {
     text: t("Attività"),
     url: getLocalizedLink("/attivita", lang),
+    active:
+      Astro.url.pathname === getLocalizedLink("/attivita", lang) ||
+      item?.sys?.contentType?.sys?.id === ACTIVITY_CONTENT_TYPE,
   },
   {
     text: t("Chi siamo"),

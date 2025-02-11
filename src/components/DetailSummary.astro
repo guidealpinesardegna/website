@@ -1,0 +1,26 @@
+---
+const { summary } = Astro.props;
+---
+
+<details>
+  <summary
+    class="cursor-pointer font-semibold flex items-center justify-between
+            bg-gray-500
+           text-white
+            p-4 uppercase"
+  >
+    {summary}
+    <span class="ml-2 transition-transform duration-300 details-icon">▼</span>
+  </summary>
+  <div class="p-4 bg-gray-100">
+    <slot />
+  </div>
+</details>
+
+<script>
+  // @ts-nocheck
+  document.querySelector("details").addEventListener("toggle", function () {
+    const icon = this.querySelector(".details-icon");
+    icon.style.transform = this.open ? "rotate(180deg)" : "rotate(0deg)";
+  });
+</script>

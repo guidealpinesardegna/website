@@ -1,0 +1,47 @@
+---
+import "leaflet/dist/leaflet.css";
+import { THUNDERFOREST_API_KEY } from "../../constants";
+const { activity } = Astro.props;
+---
+
+<div
+  id="map"
+  data-lat={activity.fields.map.lat}
+  data-lon={activity.fields.map.lon}
+  data-key={THUNDERFOREST_API_KEY}
+  style="width: 100%; height: 400px"
+>
+</div>
+
+<script>
+  import L from "leaflet";
+
+  const mapDiv = document.getElementById("map");
+  const lat = mapDiv.getAttribute("data-lat");
+  const lon = mapDiv.getAttribute("data-lon");
+  const key = mapDiv.getAttribute("data-key");
+  const map = L.map("map").setView([lat, lon], 13);
+
+  L.tileLayer(
+    `https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${key}`,
+    {
+      attribution: false,
+      zoom: 9,
+      maxZoom: 18,
+    }
+  ).addTo(map);
+
+  const markerHtml = `
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="var(--color-primary, red)" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 4.97 7 13 7 13s7-8.03 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    `;
+  const customIcon = L.divIcon({
+    className: "custom-marker",
+    html: markerHtml,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+  });
+
+  L.marker([lat, lon], { icon: customIcon }).addTo(map);
+</script>

@@ -15,7 +15,13 @@ const t = useTranslation(lang, "common");
       {
         menuLinks.slice(0, 2).map((link) => (
           <li>
-            <a href={link.url}>{link.text}</a>
+            <a
+              href={link.url}
+              aria-current={link.active ? "page" : null}
+              class:list={link.active && "text-primary font-bold"}
+            >
+              {link.text}
+            </a>
           </li>
         ))
       }

@@ -18,4 +18,10 @@
   .button:hover {
     @apply outline-2 outline-black transition-all;
   }
+  .textfield {
+    @apply border-2 border-gray-700 py-2 pl-2 pr-2 bg-white focus:outline-primary;
+  }
+  .label {
+    @apply font-bold;
+  }
 }
