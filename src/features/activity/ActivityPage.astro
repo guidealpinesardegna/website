@@ -3,8 +3,9 @@ import fs from "fs-extra";
 import Layout from "../../layouts/Layout.astro";
 import { getLocalizedField } from "../../i18n/utils";
 const { lang, activity } = Astro.props;
+const info = fs.readJsonSync("_cache/homepage.json");
 ---
 
-<Layout lang={lang} item={activity}
+<Layout lang={lang} info={info} item={activity}
   >{getLocalizedField("fields.title", activity, lang)}</Layout
 >

@@ -5,7 +5,7 @@
   "scripts": {
     "get-data": "node src/lib/getDataFromContentful",
     "dev": "npm run get-data && astro dev",
-    "build": "astro build",
+    "build": "npm run get-data && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

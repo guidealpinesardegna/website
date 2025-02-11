@@ -1,6 +1,8 @@
 ---
+import fs from "fs-extra";
 import Layout from "../../layouts/Layout.astro";
 const { lang } = Astro.props;
+const info = fs.readJsonSync("_cache/homepage.json");
 ---
 
-<Layout lang={lang}>about us</Layout>
+<Layout lang={lang} info={info}>about us</Layout>
