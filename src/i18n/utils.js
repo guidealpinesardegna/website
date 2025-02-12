@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { i18nConfig } from "../../astro.config.mjs";
 import { routes, ui } from "./translations";
-import { CATEGORIES } from "../constants";
 
 export function useTranslation(lang, nameSpace) {
   return function t(key) {
@@ -11,7 +10,7 @@ export function useTranslation(lang, nameSpace) {
       try {
         return ui[nameSpace][key][lang];
       } catch (err) {
-        console.log("missing transaltion for", { nameSpace, key, lang });
+        // console.log("missing transaltion for", { nameSpace, key, lang });
         return key;
       }
     }
@@ -26,9 +25,8 @@ export function pageLink(path, locale, currentLocale) {
       Object.values(routes[key]).includes(path)
     );
   }
-  return Object.values(routes).find((translations) => translations[locale])?.[
-    locale
-  ];
+
+  return routes[path][locale];
 }
 
 export function getLocalizedLink(key, locale) {
@@ -73,8 +71,8 @@ export function contentTypeLink(item, locale) {
         en: "activities",
       },
       blog: {
-        it: "blog",
-        en: "blog",
+        it: "post",
+        en: "post",
       },
     };
 
@@ -101,7 +99,22 @@ export function activityCategoryLink(category, locale) {
     let slug =
       locale === i18nConfig.defaultLocale
         ? category.id
-        : CATEGORIES.find((c) => c.id === category.id)[locale];
+        : category[`id_${locale}`];
+    return prefixLink(`${map[locale]}/${slug}`, locale);
+  } catch (err) {
+    console.log(err);
+    return "";
+  }
+}
+
+export function activityTypeLink(type, locale) {
+  try {
+    const map = {
+      it: "tipo",
+      en: "type",
+    };
+    let slug =
+      locale === i18nConfig.defaultLocale ? type.id : type[`id_${locale}`];
     return prefixLink(`${map[locale]}/${slug}`, locale);
   } catch (err) {
     console.log(err);

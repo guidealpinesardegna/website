@@ -7,6 +7,8 @@ import {
   ACTIVITY_CONTENT_TYPE,
   BLOG_CONTENT_TYPE,
 } from "../constants.js";
+import { sortActivities } from "./utils.js";
+import { CATEGORIES, TYPES } from "../constants.js";
 
 const IS_PROD = process.env.ENV === "production";
 
@@ -66,7 +68,14 @@ async function getActivities() {
     include: 2,
   });
 
-  await writeJson("activities", activities);
+  await writeJson(
+    "activities",
+    sortActivities(activities).map((a) => ({
+      ...a,
+      category: CATEGORIES.find((c) => c.id === a.fields.category),
+      type: TYPES.find((c) => c.id === a.fields.type),
+    }))
+  );
   return activities;
 }
 

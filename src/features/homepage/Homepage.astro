@@ -11,7 +11,7 @@ import {
 import Layout from "../../layouts/Layout.astro";
 import WidthContainer from "../../components/WidthContainer.astro";
 import CategoryImageBox from "./CategoryImageBox.astro";
-import PostCard from "../blog/PostCard.astro";
+import PostHomePageCard from "../blog/PostHomePageCard.astro";
 import { CATEGORIES, SITE_NAME, SITE_SLOGAN } from "../../constants";
 import chisiamo from "../../assets/chi-siamo.jpg";
 import grivel from "../../assets/partners/grivel.png";
@@ -106,7 +106,7 @@ const posts = fs.readJsonSync("_cache/posts.json").slice(0, 4);
             posts.map((post) => (
               <li class="border-b border-dashed border-b-gray-400 pb-8 min-md:nth-[3]:border-none min-md:nth-[4]:border-none max-sm:nth-[4]:border-none">
                 <a href={contentTypeLink(post, lang)}>
-                  <PostCard post={post} lang={lang} TitleTag="h3" />
+                  <PostHomePageCard post={post} lang={lang} TitleTag="h3" />
                 </a>
               </li>
             ))

@@ -1,25 +1,25 @@
 ---
-import ResponsiveImage from "../../components/ResponsiveImage.astro";
-const { activity } = Astro.props;
+import ResponsiveImage from "./ResponsiveImage.astro";
+const { photos } = Astro.props;
 ---
 
 <ul class="flex flex-wrap gap-2">
   {
-    activity.fields.gallery.map((photo) => (
-      <li>
+    photos.map((photo) => (
+      <li class="w-[80px] min-sm:w-[120px] min-md:w-[150px]">
         <a
           data-fslightbox
           href={`${photo.fields.file.url}?w=1600&fit=thumb&q=60&fm=avif`}
           data-caption={photo.fields.title || ""}
           data-group="gallery"
-          data-astro-prefetch
+          class="block"
         >
           <ResponsiveImage
             src={`${photo.fields.file.url}?w=400&h=400&fit=thumb&q=60&fm=avif`}
             sizes={{
               "600": `${photo.fields.file.url}?w=160&h=160&fit=thumb&q=60&fm=avif`,
             }}
-            alt={activity.fields.title || ""}
+            alt={photo.fields.title || ""}
             loading="lazy"
             decoding="async"
             width="150"

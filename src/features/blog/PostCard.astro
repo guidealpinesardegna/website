@@ -1,24 +1,42 @@
 ---
+import dayjs from "dayjs";
 const { post, lang, TitleTag = "h2" } = Astro.props;
-import { useTranslation, getLocalizedField } from "../../i18n/utils";
+import {
+  useTranslation,
+  getLocalizedField,
+  contentTypeLink,
+} from "../../i18n/utils";
 const t = useTranslation(lang, "blog");
 ---
 
-<article class="flex gap-4 max-w-[500px] group">
+<article class="flex flex-col justify-start items-start max-w-[500px] h-full">
   <img
-    class="block aspect-[1/1] bg-gray-100 object-cover group-hover:outline-primary group-hover:outline-4 transition-all"
-    width="120"
-    height="120"
-    src={`${post?.fields?.cover?.fields?.file?.url}?w=400&h=400&fit=thumb&fm=avif&q=50`}
+    class="block aspect-[3/2] bg-gray-100 object-cover"
+    width="600"
+    height="400"
+    src={`${post?.fields?.cover?.fields?.file?.url}?w=800&h=600&fit=thumb&fm=avif&q=50`}
     loading="lazy"
     alt={post?.fields?.cover?.fields?.title || post.fields?.title}
   />
-  <div>
-    <TitleTag class="uppercase font-bold text-sm mb-1"
-      >{getLocalizedField("fields.title", post, lang)}</TitleTag
-    >
-    <p class="text-gray-700 text-sm">
-      {getLocalizedField("fields.abstract", post, lang)}
-    </p>
+  <div
+    class="p-6 border-l border-b border-r border-gray-200 flex-1 flex flex-col w-full"
+  >
+    <div class="flex-1">
+      <TitleTag class="font-bold text-xl leading-tight"
+        >{getLocalizedField("fields.title", post, lang)}</TitleTag
+      >
+
+      <span class="text-primary font-semibold text-sm">
+        {dayjs(post.fields.date).format("DD/MM/YYYY")}
+      </span>
+
+      <p class="text-gray-700 mt-2">
+        {getLocalizedField("fields.abstract", post, lang)}
+      </p>
+    </div>
+
+    <div class="flex gap-2 items-center mt-6 font-medium text-gray-700">
+      <a href={contentTypeLink(post, lang)} class="button">{t("Dettagli")}</a>
+    </div>
   </div>
 </article>

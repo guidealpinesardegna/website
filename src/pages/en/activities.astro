@@ -1,0 +1,7 @@
+---
+import fs from "fs-extra";
+import ActivitiesPage from "../../features/activity/ActivitiesPage.astro";
+const activities = fs.readJsonSync("_cache/activities.json");
+---
+
+<ActivitiesPage lang="en" activities={activities} />

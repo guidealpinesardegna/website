@@ -1,0 +1,50 @@
+---
+import dayjs from "dayjs";
+const { activity, lang, TitleTag = "h2" } = Astro.props;
+
+import {
+  useTranslation,
+  getLocalizedField,
+  contentTypeLink,
+} from "../../i18n/utils";
+const t = useTranslation(lang, "activity");
+---
+
+<article class="flex flex-col justify-start items-start max-w-[500px] h-full">
+  <img
+    class="block aspect-[3/2] bg-gray-100 object-cover"
+    width="600"
+    height="400"
+    src={`${activity?.fields?.cover?.fields?.file?.url}?w=800&h=600&fit=thumb&fm=avif&q=50`}
+    loading="lazy"
+    alt={activity?.fields?.cover?.fields?.title || activity.fields?.title}
+  />
+  <div
+    class="p-6 border-l border-b border-r border-gray-200 flex-1 flex flex-col w-full"
+  >
+    <div class="flex-1">
+      <TitleTag class="font-bold text-xl leading-tight"
+        >{getLocalizedField("fields.title", activity, lang)}</TitleTag
+      >
+      {
+        activity.fields.dateStart && (
+          <span class="text-primary font-semibold text-sm">
+            {dayjs(activity.fields.dateStart).format("DD/MM/YYYY")}
+            {activity.fields.dateEnd &&
+              ` - ${dayjs(activity.fields.dateEnd).format("DD/MM/YYYY")}`}
+          </span>
+        )
+      }
+
+      <p class="text-gray-700 mt-2">
+        {getLocalizedField("fields.abstract", activity, lang)}
+      </p>
+    </div>
+
+    <div class="flex gap-2 items-center mt-6 font-medium text-gray-700">
+      <a href={contentTypeLink(activity, lang)} class="button"
+        >{t("Dettagli")}</a
+      >
+    </div>
+  </div>
+</article>

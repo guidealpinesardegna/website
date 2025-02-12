@@ -1,16 +1,9 @@
 ---
-import fs from "fs-extra";
 import ActivityPage from "../../features/activity/ActivityPage.astro";
-import Layout from "../../layouts/Layout.astro";
+import { activitiesStaticPaths } from "../../lib/staticPaths";
 
 export function getStaticPaths() {
-  const activities = fs.readJsonSync("_cache/activities.json");
-  return activities.map((activity) => ({
-    params: { slug: activity.fields.slug },
-    props: {
-      activity,
-    },
-  }));
+  return activitiesStaticPaths("it");
 }
 
 const { activity } = Astro.props;

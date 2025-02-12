@@ -8,22 +8,47 @@ export const THUNDERFOREST_API_KEY = "b64a3ce6ca424b68b9287b4b96ceef3e";
 export const CATEGORIES = [
   {
     id: "arrampicata",
+    id_en: "climbing",
     name: "Arrampicata",
-    en: "climbing",
+    name_en: "Climbing",
   },
   {
     id: "multipitch",
+    id_en: "multipitch",
     name: "Multipitch",
-    en: "multipitch",
+    name_en: "Multipitch",
   },
   {
     id: "trekking",
+    id_en: "trekking",
     name: "Trekking-Abseiling",
-    en: "trekking",
+    name_en: "Trekking-Abseiling",
   },
   {
     id: "ferrate",
+    id_en: "via-ferrata",
     name: "Ferrate",
-    en: "ferrata",
+    name_en: "Via Ferrata",
+  },
+];
+
+export const TYPES = [
+  {
+    id: "viaggi",
+    id_en: "travels",
+    name: "Viaggi",
+    name_en: "Travels",
+  },
+  {
+    id: "corsi",
+    id_en: "courses",
+    name: "Corsi",
+    name_en: "Courses",
+  },
+  {
+    id: "uscite",
+    id_en: "outings",
+    name: "uscite",
+    name_en: "Activities",
   },
 ];

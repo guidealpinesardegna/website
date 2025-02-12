@@ -24,4 +24,7 @@
   .label {
     @apply font-bold;
   }
+  .scrollbar-stable {
+    scrollbar-gutter: stable;
+  }
 }

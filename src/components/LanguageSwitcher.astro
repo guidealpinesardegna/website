@@ -19,7 +19,9 @@ const languages = i18nConfig.locales;
           localizedLink = pageLink(currentPath, lang, currentLocale);
         } else {
           const link = getLocalizedField("fields.slug", item, lang);
+
           const currentSubPath = currentPath.split("/").pop();
+
           if (currentSubPath !== link) {
             localizedLink = contentTypeLink(item, lang);
           }

@@ -13,7 +13,10 @@ const menuLinks = [
     url: getLocalizedLink("/attivita", lang),
     active:
       Astro.url.pathname === getLocalizedLink("/attivita", lang) ||
-      item?.sys?.contentType?.sys?.id === ACTIVITY_CONTENT_TYPE,
+      item?.sys?.contentType?.sys?.id === ACTIVITY_CONTENT_TYPE ||
+      ["tipo", "type", "categoria", "category"].some((keyword) =>
+        Astro.url.pathname.includes(keyword)
+      ),
   },
   {
     text: t("Chi siamo"),
@@ -22,6 +25,9 @@ const menuLinks = [
   {
     text: t("Blog"),
     url: getLocalizedLink("/blog", lang),
+    active:
+      Astro.url.pathname.indexOf("post") !== -1 ||
+      Astro.url.pathname.indexOf("blog") !== -1,
   },
   {
     text: t("Contatti"),

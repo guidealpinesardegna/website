@@ -1,0 +1,86 @@
+---
+import fs from "fs-extra";
+import Layout from "../../layouts/Layout.astro";
+import WidthContainer from "../../components/WidthContainer.astro";
+import Tag from "../../components/Tag.astro";
+import ActivityCard from "./ActivityCard.astro";
+import {
+  useTranslation,
+  getLocalizedField,
+  activityCategoryLink,
+  activityTypeLink,
+} from "../../i18n/utils";
+import { SITE_NAME, CATEGORIES, TYPES } from "../../constants";
+const { lang, activities, type } = Astro.props;
+const info = fs.readJsonSync("_cache/homepage.json");
+const t = useTranslation(lang, "activity");
+let pageTitle = t("Tutte le attività");
+
+if (type === "type") {
+  pageTitle = getLocalizedField("type.name", activities[0], lang);
+}
+if (type === "category") {
+  pageTitle = getLocalizedField("category.name", activities[0], lang);
+}
+---
+
+<Layout
+  lang={lang}
+  info={info}
+  title={`${pageTitle} - ${SITE_NAME}`}
+  description={t("Arrampicata, trekking, ferrate in Sardegna")}
+>
+  <WidthContainer>
+    <div
+      class="flex max-lg:flex-col min-lg:flex-row max-md:mt-16 min-md:mt-24 max-md:gap-8 min-md:gap-16 items-start"
+    >
+      <main class="flex-4">
+        <h1 class="font-bold text-4xl mb-12">{pageTitle}</h1>
+
+        {
+          activities.length > 0 ? (
+            <ul class="flex flex-col min-md:grid min-md:grid-cols-2 min-xl:grid-cols-3 gap-4">
+              {activities.map((activity) => (
+                <li class="h-full">
+                  <ActivityCard activity={activity} lang={lang} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{t("Nessuna attività")}</p>
+          )
+        }
+      </main>
+      <aside class="flex-1">
+        <ul class="flex gap-2 flex-wrap min-lg:pt-22">
+          {
+            CATEGORIES.map((cat) => (
+              <li>
+                <Tag
+                  href={activityCategoryLink(cat, lang)}
+                  active={
+                    Astro.url.pathname === activityCategoryLink(type, lang)
+                  }
+                >
+                  {getLocalizedField("name", cat, lang)}
+                </Tag>
+              </li>
+            ))
+          }
+          {
+            TYPES.map((type) => (
+              <li>
+                <Tag
+                  href={activityTypeLink(type, lang)}
+                  active={Astro.url.pathname === activityTypeLink(type, lang)}
+                >
+                  {getLocalizedField("name", type, lang)}
+                </Tag>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </WidthContainer>
+</Layout>

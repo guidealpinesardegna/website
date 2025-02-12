@@ -8,19 +8,23 @@ import DetailSummary from "../../components/DetailSummary.astro";
 import Tag from "../../components/Tag.astro";
 import ResponsiveImage from "../../components/ResponsiveImage.astro";
 import ActivityMap from "./ActivityMap.astro";
-import ActivityGallery from "./ActivityGallery.astro";
+import Gallery from "../../components/Gallery.astro";
 import {
   activityCategoryLink,
+  activityTypeLink,
   getLocalizedField,
   useTranslation,
+  pageLink,
 } from "../../i18n/utils";
-import { SITE_NAME, CATEGORIES } from "../../constants";
+import { SITE_NAME, CATEGORIES, TYPES } from "../../constants";
 import CalendarIcon from "../../svg/calendar.svg";
 import EuroIcon from "../../svg/euro.svg";
 const { lang, activity } = Astro.props;
 const info = fs.readJsonSync("_cache/homepage.json");
 const t = useTranslation(lang, "activity");
 const coverBaseUrl = activity.fields.cover.fields.file.url;
+const category = CATEGORIES.find((c) => c.id === activity.fields.category);
+const type = TYPES.find((t) => t.id === activity.fields.type);
 ---
 
 <Layout
@@ -35,33 +39,35 @@ const coverBaseUrl = activity.fields.cover.fields.file.url;
 >
   <WidthContainer>
     <div class="text-center max-sm:mt-8 min-sm:mt-16 max-sm:mb-8 min-sm:mb-16">
-      <h1 class="text-5xl font-black mb-4">
+      <h1 class="text-4xl min-md:text-5xl font-black mb-4">
         {getLocalizedField("fields.title", activity, lang)}
       </h1>
-      <p class="text-gray-600 text-xl">
+      <p class="text-gray-600 text-l min-md:text-xl">
         {getLocalizedField("fields.abstract", activity, lang)}
       </p>
     </div></WidthContainer
   >
-  <div class="flex justify-center">
+  <div
+    class="flex justify-center w-full aspect-16/9 max-w-[1920px] mx-auto bg-gray-100"
+  >
     <ResponsiveImage
-      src={`${coverBaseUrl}?w=3000&h=1000&q=50&fm=avif`}
+      src={`${coverBaseUrl}?w=3600&h=2025&q=60&fm=avif`}
       sizes={{
-        "600": `${coverBaseUrl}?w=1000&h=333&q=70&fm=avif`,
-        "1024": `${coverBaseUrl}?w=1500&h=500&q=70&fm=avif`,
-        "1600": `${coverBaseUrl}?w=2100&h=700&q=70&fm=avif`,
+        "600": `${coverBaseUrl}?w=1000&h=562&q=70&fm=avif`,
+        "1024": `${coverBaseUrl}?w=1600&h=900&q=70&fm=avif`,
+        "1600": `${coverBaseUrl}?w=2000&h=1125&q=70&fm=avif`,
       }}
       alt={activity.fields.cover.fields.title || ""}
       loading="eager"
       fetchpriority="high"
-      width="1500"
-      height="500"
-      class="bg-gray-100 object-cover max-w-[1600px]"
+      width="1600"
+      height="900"
+      class="object-cover w-full h-full aspect-16/9"
     />
   </div>
   <WidthContainer>
     <div
-      class="flex max-md:flex-col min-md:flex-row max-md:mt-16 min-md:mt-24 max-md:gap-8 min-md:gap-32 items-start"
+      class="flex max-md:flex-col min-md:flex-row max-md:mt-16 min-md:mt-24 max-md:gap-8 min-md:gap-32 items-start justify-center"
     >
       <main class="min-md:w-[70ch]">
         <div
@@ -88,12 +94,18 @@ const coverBaseUrl = activity.fields.cover.fields.file.url;
             }</DetailSummary
           >
         </div>
-        <h2 class="uppercase font-bold mb-4 mt-16">
-          {t("Galleria fotografica")}
-        </h2>
-        <ActivityGallery activity={activity} />
+        {
+          activity.fields.gallery.length > 0 && (
+            <>
+              <h2 class="uppercase font-bold mb-4 mt-16">
+                {t("Galleria fotografica")}
+              </h2>
+              <Gallery photos={activity.fields.gallery} />
+            </>
+          )
+        }
       </main>
-      <aside class="w-[400px]">
+      <aside class="w-full min-md:w-[400px]">
         <div class="bg-gray-100 p-8">
           <dl>
             <dt
@@ -120,10 +132,20 @@ const coverBaseUrl = activity.fields.cover.fields.file.url;
           </dl>
         </div>
 
-        <form name="contact" netlify class="p-6 bg-primary/10 mt-8">
+        <form
+          name="contact"
+          data-netlify="true"
+          class="p-6 bg-primary/10 mt-8"
+          netlify-honeypot="bot-field"
+          action={pageLink("/messaggio-inviato")}
+        >
           <h2 class="uppercase font-bold mb-8">
             {t("Richiedi informazioni")}
           </h2>
+          <label class="sr-only">
+            Non compilarlo se sei umano: <input name="bot-field" />
+          </label>
+
           <p class="sr-only">
             <input type="text" name="attivita" value={activity.fields.title} />
           </p>
@@ -145,12 +167,12 @@ const coverBaseUrl = activity.fields.cover.fields.file.url;
             <button type="submit" class="button">Send</button>
           </p>
         </form>
-        <div class="pt-16">
-          <Tag
-            href={activityCategoryLink(
-              CATEGORIES.find((c) => c.id === activity.fields.category),
-              lang
-            )}>{activity.fields.category}</Tag
+        <div class="pt-16 flex gap-2">
+          <Tag href={activityCategoryLink(category, lang)}
+            >#{getLocalizedField("name", category, lang)}</Tag
+          >
+          <Tag href={activityTypeLink(type, lang)}
+            >#{getLocalizedField("name", type, lang)}</Tag
           >
         </div>
       </aside>

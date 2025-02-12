@@ -36,7 +36,7 @@ const t = useTranslation(lang, "common");
   <SearchIcon aria-hidden="true" class="absolute left-2 top-3.5 h-4" />
   <div
     id="results"
-    class="fixed w-max max-w-[300px] border-2 border-slate-700 p-4 hidden"
+    class="fixed w-max max-w-[300px] border-2 border-slate-700 p-4 hidden bg-white"
   >
     <div
       id="arrow"
@@ -60,6 +60,7 @@ const t = useTranslation(lang, "common");
   const arrowElement = document.querySelector("#arrow");
   const posts = JSON.parse(form.getAttribute("data-posts"));
   const resultList = document.createElement("ul");
+  resultList.setAttribute("class", "flex flex-col gap-4");
   const hint = document.createElement("p");
   hint.classList.add("hint");
   hint.textContent = "Digita almento 3 caratteri";
@@ -156,12 +157,12 @@ const t = useTranslation(lang, "common");
         searchResults.forEach((activity) => {
           resultList.insertAdjacentHTML(
             "beforeend",
-            `<li>
+            `<li class="border-b border-gray-300 border-dashed pb-4 last:border-none">
               <a href="${activity.link}" class="flex gap-4 focus:outline-2 outline-color-primary">
                 <img src="${activity.image}?w=100&h=100&fm=avif&fit=thumb&q=50" width="60" height="60" alt="" class="shrink-0 w-[60px] h-[60px]"/>
                 <div>
-                  <p class="font-bold mb-1">${activity.title}</p>
-                  <p class="text-sm">${activity.abstract}</p>
+                  <p class="font-bold mb-1 text.sm">${activity.title}</p>
+                  <p class="text-xs">${activity.abstract}</p>
                 </div>
                 
               </a>

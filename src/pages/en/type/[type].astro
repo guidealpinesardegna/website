@@ -1,0 +1,16 @@
+---
+import fs from "fs-extra";
+import { activitiesTypesStaticPaths } from "../../../lib/staticPaths";
+import ActivitiesPage from "../../../features/activity/ActivitiesPage.astro";
+
+const { type } = Astro.params;
+
+export function getStaticPaths() {
+  return activitiesTypesStaticPaths("en");
+}
+
+const activities = fs.readJsonSync("_cache/activities.json");
+const filtered = activities.filter((a) => a.type.id_en === type);
+---
+
+<ActivitiesPage lang="en" activities={filtered} type="type" />

@@ -13,7 +13,7 @@ const {
 } = Astro.props;
 ---
 
-<picture class={className}>
+<picture>
   {
     Object.entries(sizes).map(([media, url]) => {
       /** @ts-ignore */
@@ -29,6 +29,7 @@ const {
     loading={loading}
     fetchpriority={fetchpriority}
     decoding={decoding}
+    class={className}
     {...props}
   />
 </picture>

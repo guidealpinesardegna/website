@@ -1,0 +1,45 @@
+---
+import fs from "fs-extra";
+import Layout from "../../layouts/Layout.astro";
+import WidthContainer from "../../components/WidthContainer.astro";
+import PostCard from "./PostCard.astro";
+import { useTranslation } from "../../i18n/utils";
+import { SITE_NAME, CATEGORIES, TYPES } from "../../constants";
+const { lang, posts } = Astro.props;
+const info = fs.readJsonSync("_cache/homepage.json");
+const t = useTranslation(lang, "blog");
+let pageTitle = t("Blog");
+---
+
+<Layout
+  lang={lang}
+  info={info}
+  title={`${pageTitle} - ${SITE_NAME}`}
+  description={t(
+    "Il nostro blog su arrampicata, trekking, ferrate in Sardegna"
+  )}
+>
+  <WidthContainer>
+    <div
+      class="flex max-lg:flex-col min-lg:flex-row max-md:mt-16 min-md:mt-24 max-md:gap-8 min-md:gap-16 items-start"
+    >
+      <main class="flex-4">
+        <h1 class="font-bold text-4xl mb-12">{pageTitle}</h1>
+
+        {
+          posts.length > 0 ? (
+            <ul class="flex flex-col min-md:grid min-md:grid-cols-2 min-xl:grid-cols-3 gap-4">
+              {posts.map((post) => (
+                <li class="h-full">
+                  <PostCard post={post} lang={lang} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{t("Nessun post")}</p>
+          )
+        }
+      </main>
+    </div>
+  </WidthContainer>
+</Layout>

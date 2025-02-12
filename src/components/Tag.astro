@@ -3,6 +3,10 @@ const props = Astro.props;
 ---
 
 <a
-  class="border-2 border-primary p-4 text-primary hover:bg-primary hover:text-white"
-  {...props}>#<slot /></a
+  aria-current={props.active ? "page" : null}
+  class:list={[
+    props.active && "bg-primary text-white",
+    "border-2 border-primary p-2 rounded-sm text-primary hover:bg-primary hover:text-white block",
+  ]}
+  {...props}><slot /></a
 >

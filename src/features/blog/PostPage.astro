@@ -1,0 +1,75 @@
+---
+import fs from "fs-extra";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import Layout from "../../layouts/Layout.astro";
+import WidthContainer from "../../components/WidthContainer.astro";
+import ResponsiveImage from "../../components/ResponsiveImage.astro";
+import Gallery from "../../components/Gallery.astro";
+import { getLocalizedField, useTranslation } from "../../i18n/utils";
+import { SITE_NAME } from "../../constants";
+
+const { lang, post } = Astro.props;
+const info = fs.readJsonSync("_cache/homepage.json");
+const t = useTranslation(lang, "blog");
+const coverBaseUrl = post.fields.cover.fields.file.url;
+---
+
+<Layout
+  lang={lang}
+  info={info}
+  item={post}
+  title={`${getLocalizedField("fields.title", post, lang)} - ${SITE_NAME}`}
+  description={getLocalizedField("fields.abstract", post, lang)}
+  ogImage={`https:${post.fields.cover.fields.file.url}${decodeURIComponent(
+    "?w=1200&h=630&fm=jpg&fit=thumb"
+  )}`}
+>
+  <WidthContainer>
+    <div class="text-center max-sm:mt-8 min-sm:mt-16 max-sm:mb-8 min-sm:mb-16">
+      <h1 class="text-4xl min-md:text-5xl font-black mb-4">
+        {getLocalizedField("fields.title", post, lang)}
+      </h1>
+      <p class="text-gray-600 text-l min-md:text-xl">
+        {getLocalizedField("fields.abstract", post, lang)}
+      </p>
+    </div></WidthContainer
+  >
+  <div
+    class="flex justify-center w-full aspect-16/9 max-w-[1920px] mx-auto bg-gray-100"
+  >
+    <ResponsiveImage
+      src={`${coverBaseUrl}?w=3600&h=2025&q=60&fm=avif`}
+      sizes={{
+        "600": `${coverBaseUrl}?w=1000&h=562&q=70&fm=avif`,
+        "1024": `${coverBaseUrl}?w=1600&h=900&q=70&fm=avif`,
+        "1600": `${coverBaseUrl}?w=2000&h=1125&q=70&fm=avif`,
+      }}
+      alt={post.fields.cover.fields.title || ""}
+      loading="eager"
+      fetchpriority="high"
+      width="1600"
+      height="900"
+      class="object-cover w-full h-full aspect-16/9"
+    />
+  </div>
+  <WidthContainer>
+    <main class="min-md:w-[70ch] m-auto mt-16">
+      <div
+        class="html-fragment mb-16 min-lg:text-lg"
+        set:html={documentToHtmlString(
+          getLocalizedField("fields.body", post, lang)
+        )}
+      />
+      {
+        post.fields.gallery.length > 0 && (
+          <>
+            <h2 class="uppercase font-bold mb-4 mt-16">
+              {t("Galleria fotografica")}
+            </h2>
+            <Gallery photos={post.fields.gallery} />
+          </>
+        )
+      }
+    </main>
+  </WidthContainer>
+</Layout>

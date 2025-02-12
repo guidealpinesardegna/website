@@ -1,0 +1,7 @@
+---
+import fs from "fs-extra";
+import BlogPage from "../features/blog/BlogPage.astro";
+const posts = fs.readJsonSync("_cache/posts.json");
+---
+
+<BlogPage lang="it" posts={posts} />

@@ -33,3 +33,33 @@ export const trapFocus = (element) => {
     }
   });
 };
+
+export const sortActivities = (activities) => {
+  const today = new Date(); // Set today's date
+
+  // Separate activities with and without dateStart
+  let activitiesWithDate = [];
+  let activitiesWithoutDate = [];
+
+  activities.forEach((activity) => {
+    if (activity.fields.dateStart) {
+      const dateStart = new Date(activity.fields.dateStart);
+      if (dateStart >= today) {
+        activitiesWithDate.push(activity);
+      }
+    } else {
+      activitiesWithoutDate.push(activity);
+    }
+  });
+
+  // Sort activities by dateStart in ascending order
+  activitiesWithDate.sort(
+    (a, b) => new Date(a.fields.dateStart) - new Date(b.fields.dateStart)
+  );
+  activitiesWithoutDate.sort((a, b) =>
+    a.fields.title.localeCompare(b.fields.title)
+  );
+
+  // Concatenate sorted activities with those without dateStart
+  return [...activitiesWithDate, ...activitiesWithoutDate];
+};
