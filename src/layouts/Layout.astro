@@ -6,7 +6,16 @@ import FontsImport from "../components/FontsImport.astro";
 import HtmlStyles from "../components/HtmlStyles.astro";
 import Cookiebanner from "../components/Cookiebanner.astro";
 import { SITE_URL } from "../constants";
-const { lang, info, title, description, ogType, ogImage, item } = Astro.props;
+const {
+  lang,
+  info,
+  title,
+  description,
+  ogType,
+  ogImage,
+  item,
+  activeMenuLink,
+} = Astro.props;
 const isDev = import.meta.env.DEV;
 const canonicalUrl = `${SITE_URL}${Astro.url.pathname}`;
 ---
@@ -46,7 +55,12 @@ const canonicalUrl = `${SITE_URL}${Astro.url.pathname}`;
   </head><body class="h-full w-full">
     <Cookiebanner lang={lang} />
     <div class="flex flex-col h-full">
-      <Header lang={lang} item={item} info={info} />
+      <Header
+        lang={lang}
+        item={item}
+        info={info}
+        activeMenuLink={activeMenuLink}
+      />
       <div class="pb-24 flex-1"><slot /></div>
       <Footer lang={lang} info={info} />
     </div>

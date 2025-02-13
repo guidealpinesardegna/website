@@ -21,7 +21,13 @@ export const routes = {
     en: "/en/blog",
   },
   "/chi-siamo": {
-    en: "/en/who-we-are",
+    en: "/en/about-us",
+  },
+  "/contatti": {
+    en: "/en/contact-us",
+  },
+  "/privacy": {
+    en: "/en/privacy",
   },
   "/messaggio-inviato": {
     en: "/en/message-sent",

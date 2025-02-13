@@ -1,8 +1,49 @@
 ---
 import fs from "fs-extra";
+import { Image } from "astro:assets";
+import { useTranslation, getLocalizedField } from "../../i18n/utils";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import Layout from "../../layouts/Layout.astro";
+import WidthContainer from "../../components/WidthContainer.astro";
+
+import { SITE_NAME, SITE_SLOGAN } from "../../constants";
 const { lang } = Astro.props;
+const t = useTranslation(lang, "about-us");
 const info = fs.readJsonSync("_cache/homepage.json");
+import chisiamo from "../../assets/chi-siamo.jpg";
 ---
 
-<Layout lang={lang} info={info}>about us</Layout>
+<Layout
+  lang={lang}
+  info={info}
+  activeMenuLink="chi-siamo"
+  title={`${t("Chi siamo")} - ${SITE_NAME}`}
+  description={SITE_SLOGAN}
+>
+  <WidthContainer>
+    <div class="text-center max-sm:mt-8 min-sm:mt-16 max-sm:mb-8 min-sm:mb-16">
+      <h1 class="text-4xl min-md:text-5xl font-black mb-4">
+        {t("Chi siamo")}
+      </h1>
+    </div></WidthContainer
+  >
+  <div
+    class="flex justify-center w-full aspect-16/9 max-w-[1920px] mx-auto bg-gray-100"
+  >
+    <Image
+      src={chisiamo}
+      alt=""
+      width="1600"
+      height="1064"
+      class="object-cover w-full h-full aspect-16/9"
+    />
+  </div>
+  <WidthContainer>
+    <div
+      class="html-fragment mb-16 mt-32 max-w-[70ch] m-auto"
+      set:html={documentToHtmlString(
+        getLocalizedField("fields.whoWeAre", info, lang)
+      )}
+    />
+  </WidthContainer>
+</Layout>

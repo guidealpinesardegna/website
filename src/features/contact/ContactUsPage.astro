@@ -1,0 +1,60 @@
+---
+import fs from "fs-extra";
+import { useTranslation, pageLink } from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
+import WidthContainer from "../../components/WidthContainer.astro";
+
+import { SITE_NAME, SITE_SLOGAN } from "../../constants";
+const { lang } = Astro.props;
+const t = useTranslation(lang, "contact");
+const info = fs.readJsonSync("_cache/homepage.json");
+---
+
+<Layout
+  lang={lang}
+  info={info}
+  activeMenuLink="contatti"
+  title={`${t("Contattaci")} - ${SITE_NAME}`}
+  description={SITE_SLOGAN}
+>
+  <WidthContainer>
+    <div class="text-center max-sm:mt-8 min-sm:mt-16 max-sm:mb-8 min-sm:mb-16">
+      <h1 class="text-4xl min-md:text-5xl font-black mb-4">
+        {t("Contattaci")}
+      </h1>
+    </div>
+
+    <form
+      name="contact"
+      data-netlify="true"
+      class="p-6 bg-primary/10 mt-8 max-w-[70ch] m-auto"
+      netlify-honeypot="bot-field"
+      action={pageLink("/messaggio-inviato")}
+    >
+      <h2 class="uppercase font-bold mb-8">
+        {t("Scrivici per qualsiasi dubbio o domanda")}
+      </h2>
+      <label class="sr-only">
+        Non compilarlo se sei umano: <input name="bot-field" />
+      </label>
+
+      <p class="flex flex-col gap-1 mb-4">
+        <label class="label">{t("Nome")}</label>
+        <input type="text" name="nome" required class="textfield" />
+      </p>
+      <p class="flex flex-col gap-1 mb-4">
+        <label class="label">Email</label>
+        <input type="email" name="email" required class="textfield" />
+      </p>
+      <p class="flex flex-col gap-1 mb-4">
+        <label class="label">{t("Messaggio")}</label>
+        <textarea name="messaggio" required class="textfield" required
+        ></textarea>
+      </p>
+
+      <p>
+        <button type="submit" class="button">{t("Invia")}</button>
+      </p>
+    </form>
+  </WidthContainer>
+</Layout>

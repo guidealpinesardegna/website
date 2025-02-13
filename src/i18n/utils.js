@@ -26,6 +26,10 @@ export function pageLink(path, locale, currentLocale) {
     );
   }
 
+  if (!routes[path]) {
+    return "";
+  }
+
   return routes[path][locale];
 }
 
@@ -91,6 +95,9 @@ export function contentTypeLink(item, locale) {
 }
 
 export function activityCategoryLink(category, locale) {
+  if (!category) {
+    return "";
+  }
   try {
     const map = {
       it: "categoria",

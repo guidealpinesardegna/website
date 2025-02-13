@@ -31,6 +31,7 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
   lang={lang}
   info={info}
   item={activity}
+  activeMenuLink="attivita"
   title={`${getLocalizedField("fields.title", activity, lang)} - ${SITE_NAME}`}
   description={getLocalizedField("fields.abstract", activity, lang)}
   ogImage={`https:${activity.fields.cover.fields.file.url}${decodeURIComponent(
@@ -164,7 +165,7 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
           </p>
 
           <p>
-            <button type="submit" class="button">Send</button>
+            <button type="submit" class="button">{t("Invia")}</button>
           </p>
         </form>
         <div class="pt-16 flex gap-2">

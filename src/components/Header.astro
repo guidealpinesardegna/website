@@ -3,35 +3,33 @@ import { useTranslation, getLocalizedLink } from "../i18n/utils";
 import WidthContainer from "./WidthContainer.astro";
 import DesktopHeader from "./DesktopHeader.astro";
 import MobileHeader from "./MobileHeader.astro";
-import { ACTIVITY_CONTENT_TYPE } from "../constants";
 
-const { lang, item } = Astro.props;
+const { lang, item, activeMenuLink } = Astro.props;
 const t = useTranslation(lang, "common");
 const menuLinks = [
   {
+    id: "attivita",
     text: t("Attività"),
     url: getLocalizedLink("/attivita", lang),
-    active:
-      Astro.url.pathname === getLocalizedLink("/attivita", lang) ||
-      item?.sys?.contentType?.sys?.id === ACTIVITY_CONTENT_TYPE ||
-      ["tipo", "type", "categoria", "category"].some((keyword) =>
-        Astro.url.pathname.includes(keyword)
-      ),
+    active: activeMenuLink === "attivita",
   },
   {
+    id: "chi-siamo",
     text: t("Chi siamo"),
     url: getLocalizedLink("/chi-siamo", lang),
+    active: activeMenuLink === "chi-siamo",
   },
   {
+    id: "blog",
     text: t("Blog"),
     url: getLocalizedLink("/blog", lang),
-    active:
-      Astro.url.pathname.indexOf("post") !== -1 ||
-      Astro.url.pathname.indexOf("blog") !== -1,
+    active: activeMenuLink === "blog",
   },
   {
+    id: "contatti",
     text: t("Contatti"),
-    url: getLocalizedLink("/blog", lang),
+    url: getLocalizedLink("/contatti", lang),
+    active: activeMenuLink === "contatti",
   },
 ];
 ---

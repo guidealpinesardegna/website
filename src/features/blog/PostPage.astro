@@ -18,6 +18,7 @@ const coverBaseUrl = post.fields.cover.fields.file.url;
   lang={lang}
   info={info}
   item={post}
+  activeMenuLink="blog"
   title={`${getLocalizedField("fields.title", post, lang)} - ${SITE_NAME}`}
   description={getLocalizedField("fields.abstract", post, lang)}
   ogImage={`https:${post.fields.cover.fields.file.url}${decodeURIComponent(
