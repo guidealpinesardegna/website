@@ -2,6 +2,9 @@
 dist/
 _cache
 .netlify
+contentful-deploy-button/node_modules
+contentful-deploy-button/build
+
 
 # generated types
 .astro/
