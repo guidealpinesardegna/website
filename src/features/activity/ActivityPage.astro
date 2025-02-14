@@ -14,7 +14,7 @@ import {
   activityTypeLink,
   getLocalizedField,
   useTranslation,
-  pageLink,
+  getLocalizedLink,
 } from "../../i18n/utils";
 import { SITE_NAME, CATEGORIES, TYPES } from "../../constants";
 import CalendarIcon from "../../svg/calendar.svg";
@@ -138,7 +138,7 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
           data-netlify="true"
           class="p-6 bg-primary/10 mt-8"
           netlify-honeypot="bot-field"
-          action={pageLink("/messaggio-inviato")}
+          action={getLocalizedLink("/messaggio-inviato", lang)}
         >
           <h2 class="uppercase font-bold mb-8">
             {t("Richiedi informazioni")}

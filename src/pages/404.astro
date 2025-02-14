@@ -1,0 +1,17 @@
+---
+import Image from "astro/components/Image.astro";
+import fs from "fs-extra";
+import Layout from "../layouts/Layout.astro";
+import notfound from "../assets/404.jpg";
+
+const info = fs.readJsonSync("_cache/homepage.json");
+---
+
+<Layout lang="it" info={info}>
+  <div
+    class="max-w-[70ch] m-auto px-4 my-32 flex justify-center flex-col text-center"
+  >
+    <p class="text-4xl font-bold mb-16">Page not found</p>
+    <Image src={notfound} width="300" height="300" alt="" class="m-auto" />
+  </div>
+</Layout>

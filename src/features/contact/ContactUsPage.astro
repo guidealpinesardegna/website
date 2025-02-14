@@ -1,6 +1,6 @@
 ---
 import fs from "fs-extra";
-import { useTranslation, pageLink } from "../../i18n/utils";
+import { useTranslation, getLocalizedLink } from "../../i18n/utils";
 import Layout from "../../layouts/Layout.astro";
 import WidthContainer from "../../components/WidthContainer.astro";
 
@@ -29,7 +29,7 @@ const info = fs.readJsonSync("_cache/homepage.json");
       data-netlify="true"
       class="p-6 bg-primary/10 mt-8 max-w-[70ch] m-auto"
       netlify-honeypot="bot-field"
-      action={pageLink("/messaggio-inviato")}
+      action={getLocalizedLink("/messaggio-inviato", lang)}
     >
       <h2 class="uppercase font-bold mb-8">
         {t("Scrivici per qualsiasi dubbio o domanda")}
