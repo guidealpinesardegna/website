@@ -14,7 +14,7 @@ const languages = i18nConfig.locales;
   <ul class="flex gap-2 font-medium">
     {
       languages.map((lang) => {
-        console.log(currentPath, lang, currentLocale);
+        console.log("--------", currentPath, lang, currentLocale);
         let localizedLink;
         if (!item) {
           localizedLink = pageLink(currentPath, lang, currentLocale);
