@@ -5,8 +5,12 @@ import GlobeIcon from "../svg/globe.svg";
 
 const { lang: currentLocale, item } = Astro.props;
 
-const currentPath = Astro.url.pathname;
+let currentPath = Astro.url.pathname;
 const languages = i18nConfig.locales;
+
+if (currentPath !== "/") {
+  currentPath = currentPath.replace(/\/$/, "");
+}
 ---
 
 <nav class=`flex gap-3 items-center`>
@@ -14,7 +18,6 @@ const languages = i18nConfig.locales;
   <ul class="flex gap-2 font-medium">
     {
       languages.map((lang) => {
-        console.log("--------", currentPath, lang, currentLocale);
         let localizedLink;
         if (!item) {
           localizedLink = pageLink(currentPath, lang, currentLocale);
