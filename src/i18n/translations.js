@@ -38,8 +38,8 @@ export const routes = {
 
 export const ui = {
   common: {
-    ciao: {
-      en: "hello",
+    "Guide Alpine Sardegna": {
+      en: "Sardinia Mountain Guides",
     },
   },
 };
