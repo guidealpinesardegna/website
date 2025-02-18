@@ -32,6 +32,8 @@ const t = useTranslation(lang, "common");
     aria-autocomplete="none"
     class="textfield indent-6"
     placeholder={t("Cerca...")}
+    data-hint={t("Digita almeno 3 caratteri")}
+    data-noresults={t("Nessun risultato")}
   />
   <SearchIcon aria-hidden="true" class="absolute left-2 top-3.5 h-4" />
   <div
@@ -46,6 +48,12 @@ const t = useTranslation(lang, "common");
     </div>
   </div>
 </form>
+
+<div
+  style="display: none"
+  class="w-[60px] h-[60px] pb-4 leading-tight text-xs last:border-none"
+>
+</div>
 
 <script>
   //@ts-nocheck
@@ -63,10 +71,10 @@ const t = useTranslation(lang, "common");
   resultList.setAttribute("class", "flex flex-col gap-4");
   const hint = document.createElement("p");
   hint.classList.add("hint");
-  hint.textContent = "Digita almento 3 caratteri";
+  hint.textContent = trigger.getAttribute("data-hint");
   const noResults = document.createElement("p");
   noResults.classList.add("no-results");
-  noResults.textContent = "Nessun Risultato";
+  noResults.textContent = trigger.getAttribute("data-noresults");
   let searchResults = [];
 
   document.body.appendChild(results); // move out the dom
@@ -161,7 +169,7 @@ const t = useTranslation(lang, "common");
               <a href="${activity.link}" class="flex gap-4 focus:outline-2 outline-color-primary">
                 <img src="${activity.image}?w=100&h=100&fm=avif&fit=thumb&q=50" width="60" height="60" alt="" class="shrink-0 w-[60px] h-[60px]"/>
                 <div>
-                  <p class="font-bold mb-1 text.sm">${activity.title}</p>
+                  <p class="font-bold mb-1 leading-tight">${activity.title}</p>
                   <p class="text-xs">${activity.abstract}</p>
                 </div>
                 

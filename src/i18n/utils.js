@@ -10,7 +10,7 @@ export function useTranslation(lang, nameSpace) {
       try {
         return ui[nameSpace][key][lang];
       } catch (err) {
-        // console.log("missing transaltion for", { nameSpace, key, lang });
+        console.log("missing transaltion for", { nameSpace, key, lang });
         return key;
       }
     }
