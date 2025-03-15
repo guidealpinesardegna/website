@@ -43,13 +43,15 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
       <h1 class="text-4xl min-md:text-5xl font-black mb-4">
         {getLocalizedField("fields.title", activity, lang)}
       </h1>
-      <p class="text-gray-600 text-l min-md:text-xl">
+      <p
+        class="text-gray-600 text-l min-md:text-xl max-w-[80ch] m-auto text-balance"
+      >
         {getLocalizedField("fields.abstract", activity, lang)}
       </p>
     </div></WidthContainer
   >
   <div
-    class="flex justify-center w-full aspect-16/9 max-w-[1920px] mx-auto bg-gray-100"
+    class="flex justify-center w-full aspect-16/9 max-w-[1280px] mx-auto bg-gray-100"
   >
     <ResponsiveImage
       src={`${coverBaseUrl}?w=3600&h=2025&q=60&fm=avif`}
@@ -109,19 +111,26 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
       <aside class="w-full min-md:w-[400px]">
         <div class="bg-gray-100 p-8">
           <dl>
-            <dt
-              class="font-bold uppercase text-sm mb-2 flex items-center gap-1"
-            >
-              <CalendarIcon class="h-5" />{t("Quando")}
-            </dt>
-            <dd class="border-b border-dashed border-gray-300 pb-6">
-              <span
-                >{dayjs(activity.fields.dateStart).format("DD/MM/YYYY")}{
-                  activity.fields.dateEnd &&
-                    ` - ${dayjs(activity.fields.dateEnd).format("DD/MM/YYYY")}`
-                }</span
-              >
-            </dd>
+            {
+              activity.fields.dateStart && (
+                <>
+                  <dt class="font-bold uppercase text-sm mb-2 flex items-center gap-1">
+                    <CalendarIcon class="h-5" />
+                    {t("Quando")}
+                  </dt>
+                  <dd class="border-b border-dashed border-gray-300 pb-6">
+                    {activity.fields.dateStart && (
+                      <span>
+                        {dayjs(activity.fields.dateStart).format("DD/MM/YYYY")}
+                        {activity.fields.dateEnd &&
+                          ` - ${dayjs(activity.fields.dateEnd).format("DD/MM/YYYY")}`}
+                      </span>
+                    )}
+                  </dd>
+                </>
+              )
+            }
+
             <dt
               class="font-bold uppercase text-sm mb-2 flex items-center gap-1 mt-6"
             >

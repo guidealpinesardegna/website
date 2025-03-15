@@ -3,6 +3,7 @@ import fs from "fs-extra";
 import { useTranslation, getLocalizedLink } from "../../i18n/utils";
 import Layout from "../../layouts/Layout.astro";
 import WidthContainer from "../../components/WidthContainer.astro";
+import Whatsappicon from "../../svg/whatsapp.svg";
 
 import { SITE_NAME, SITE_SLOGAN } from "../../constants";
 const { lang } = Astro.props;
@@ -52,9 +53,15 @@ const info = fs.readJsonSync("_cache/homepage.json");
         ></textarea>
       </p>
 
-      <p>
+      <p class="mb-8">
         <button type="submit" class="button">{t("Invia")}</button>
       </p>
+      <a
+        href={`https://wa.me/${info.fields.phone}`}
+        class="flex gap-2 items-center"
+        ><Whatsappicon class="w-8" />
+        {t("Contattaci via Whatsapp")}</a
+      >
     </form>
   </WidthContainer>
 </Layout>

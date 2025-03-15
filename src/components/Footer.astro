@@ -7,6 +7,16 @@ import MailchimpForm from "../components/MailChimpForm.astro";
 import Whatsappicon from "../svg/whatsapp.svg";
 
 const { lang, info } = Astro.props;
+const partners = info.fields.partners.length
+  ? info.fields.partners
+      .trim()
+      .split("\n")
+      .map((line) => {
+        const match = line.match(/(.*?)\[(.*?)\]/); // Regex to capture URL and label
+        return match ? { url: match[1], label: match[2] } : null;
+      })
+      .filter(Boolean)
+  : null; // Remove null values if any
 const t = useTranslation(lang, "common");
 ---
 
@@ -24,26 +34,19 @@ const t = useTranslation(lang, "common");
       </div>
       <div>
         <h2 class="uppercase font-bold text-sm mb-4">{t("Partner")}</h2>
-        <ul class="flex flex-col gap-3">
-          <li>
-            <a href="https://www.arrampicatasardegna.com/" target="_blank"
-              >Arrampicata Sardegna</a
-            >
-          </li>
-          <li>
-            <a href="https://proup.team/" target="_blank">Proup Team</a>
-          </li>
-          <li>
-            <a href="https://bb-sardegna.com/" target="_blank"
-              >B&B Pedra Rubia</a
-            >
-          </li>
-          <li>
-            <a href="https://pedrarubia.com/" target="_blank"
-              >Pedra Rubia Blog</a
-            >
-          </li>
-        </ul>
+        {
+          partners && (
+            <ul class="flex flex-col gap-2">
+              {partners.map((p) => (
+                <li>
+                  <a href={p.url} target="_blank" class="hover:underline">
+                    {p.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </div>
       <div>
         <h2 class="uppercase font-bold text-sm mb-4">{t("Info & Contatti")}</h2>
