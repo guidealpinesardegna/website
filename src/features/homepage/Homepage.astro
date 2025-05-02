@@ -36,7 +36,7 @@ const posts = fs.readJsonSync("_cache/posts.json").slice(0, 4);
   <div
     class="text-center max-sm:mt-8 min-sm:mt-16 relative w-fit m-auto flex flex-col justify-center items-center"
   >
-    <h1 class="text-5xl font-black mb-4">{t(SITE_NAME)}</h1>
+    <h1 class="text-5xl font-black mb-4 max-w-[95vw]">{t(SITE_NAME)}</h1>
     <p class="text-gray-600 text-xl">
       {getLocalizedField("fields.slogan", info, lang)}
     </p>
