@@ -12,7 +12,7 @@ const dataset = activities.map((activity) => ({
   title: getLocalizedField("fields.title", activity, lang),
   slug: getLocalizedField("fields.slug", activity, lang),
   abstract: getLocalizedField("fields.abstract", activity, lang),
-  image: activity.fields.cover.fields.file.url,
+  image: activity?.fields.cover?.fields?.file?.url,
   link: contentTypeLink(activity, lang),
 }));
 const t = useTranslation(lang, "common");
@@ -95,7 +95,7 @@ const t = useTranslation(lang, "common");
             post.title.toLowerCase().includes(query.toLowerCase()) ||
             (post.tags || [])
               .map((t) => t.toLowerCase())
-              .includes(query.toLowerCase())
+              .includes(query.toLowerCase()),
         )
         .slice(0, 5);
     } else {
@@ -174,7 +174,7 @@ const t = useTranslation(lang, "common");
                 </div>
                 
               </a>
-            </li>`
+            </li>`,
           );
         });
 

@@ -57,7 +57,7 @@ export const sortActivities = (activities) => {
     (a, b) => new Date(a.fields.dateStart) - new Date(b.fields.dateStart),
   );
   activitiesWithoutDate.sort((a, b) =>
-    (a.fields.title || "").localeCompare(b.fields.title || ""),
+    (a.fields.title || "").toString().localeCompare(b.fields.title || ""),
   );
 
   // Concatenate sorted activities with those without dateStart

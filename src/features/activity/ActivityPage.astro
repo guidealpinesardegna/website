@@ -22,9 +22,9 @@ import EuroIcon from "../../svg/euro.svg";
 const { lang, activity } = Astro.props;
 const info = fs.readJsonSync("_cache/homepage.json");
 const t = useTranslation(lang, "activity");
-const coverBaseUrl = activity.fields.cover.fields.file.url;
-const category = CATEGORIES.find((c) => c.id === activity.fields.category);
-const type = TYPES.find((t) => t.id === activity.fields.type);
+const coverBaseUrl = activity?.fields?.cover?.fields?.file?.url;
+const category = CATEGORIES.find((c) => c.id === activity?.fields?.category);
+const type = TYPES.find((t) => t.id === activity?.fields?.type);
 ---
 
 <Layout
@@ -34,8 +34,8 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
   activeMenuLink="attivita"
   title={`${getLocalizedField("fields.title", activity, lang)} - ${SITE_NAME}`}
   description={getLocalizedField("fields.abstract", activity, lang)}
-  ogImage={`https:${activity.fields.cover.fields.file.url}${decodeURIComponent(
-    "?w=1200&h=630&fm=jpg&fit=thumb"
+  ogImage={`https:${activity?.fields?.cover?.fields?.file?.url}${decodeURIComponent(
+    "?w=1200&h=630&fm=jpg&fit=thumb",
   )}`}
 >
   <WidthContainer>
@@ -76,7 +76,7 @@ const type = TYPES.find((t) => t.id === activity.fields.type);
         <div
           class="html-fragment mb-16 min-lg:text-lg"
           set:html={documentToHtmlString(
-            getLocalizedField("fields.description", activity, lang)
+            getLocalizedField("fields.description", activity, lang),
           )}
         />
         <div class="flex flex-col gap-4">

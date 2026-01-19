@@ -49,7 +49,7 @@ const getEntry = async (entryId) => {
 const writeJson = async (fileName, data) => {
   const cleanData = JSON.stringify(data, null, 2).replace(
     /[\u2028\u2029\uFEFF\u200B-\u200D]/g,
-    ""
+    "",
   ); // Remove problematic Unicode characters
   await fs.outputFile(`_cache/${fileName}.json`, cleanData);
 };
@@ -63,9 +63,13 @@ async function getHomePage() {
 }
 
 async function getActivities() {
-  const activities = await getEntries({
+  let activities = await getEntries({
     content_type: ACTIVITY_CONTENT_TYPE,
     include: 2,
+  });
+
+  activities = activities.map((a) => {
+    return stripEnUS(a);
   });
 
   await writeJson(
@@ -74,7 +78,7 @@ async function getActivities() {
       ...a,
       category: CATEGORIES.find((c) => c.id === a.fields.category),
       type: TYPES.find((c) => c.id === a.fields.type),
-    }))
+    })),
   );
   return activities;
 }
@@ -91,7 +95,7 @@ async function getBlogPosts() {
       const dateA = new Date(a.fields.date);
       const dateB = new Date(b.fields.date);
       return dateB - dateA;
-    })
+    }),
   );
 
   return posts;
@@ -102,5 +106,26 @@ const activities = await getActivities();
 const posts = await getBlogPosts();
 
 console.log(
-  `fetched homepage, ${activities.length} activities, ${posts.length} posts`
+  `fetched homepage, ${activities.length} activities, ${posts.length} posts`,
 );
+
+function stripEnUS(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(stripEnUS);
+  }
+  if (obj && typeof obj === "object") {
+    // If the object has only the 'en-US' key, return its value
+    const keys = Object.keys(obj);
+    if (keys.length === 1 && keys[0] === "en-US") {
+      return stripEnUS(obj["en-US"]);
+    }
+    // Otherwise, recursively process all properties
+    const result = {};
+    for (const key in obj) {
+      result[key] = stripEnUS(obj[key]);
+    }
+    return result;
+  }
+  // Primitive value, return as is
+  return obj;
+}
