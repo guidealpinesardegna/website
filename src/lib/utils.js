@@ -1,7 +1,7 @@
 export const trapFocus = (element) => {
   // get all focusable elements
   const focusableEls = element.querySelectorAll(
-    "a[href]:not([disabled]), button:not([disabled])"
+    "a[href]:not([disabled]), button:not([disabled])",
   );
   // Save first and last focusable elements
   const firstFocusableEl = focusableEls[0];
@@ -54,10 +54,10 @@ export const sortActivities = (activities) => {
 
   // Sort activities by dateStart in ascending order
   activitiesWithDate.sort(
-    (a, b) => new Date(a.fields.dateStart) - new Date(b.fields.dateStart)
+    (a, b) => new Date(a.fields.dateStart) - new Date(b.fields.dateStart),
   );
   activitiesWithoutDate.sort((a, b) =>
-    a.fields.title.localeCompare(b.fields.title)
+    (a.fields.title || "").localeCompare(b.fields.title || ""),
   );
 
   // Concatenate sorted activities with those without dateStart
